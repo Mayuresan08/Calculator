@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body{
+        display: flex;
+        justify-content: center;
+        font-size: 1.5rem;
+        /* background-color: rgb(68, 40, 68); */
+        background-image: linear-gradient(rgb(78, 20, 78),black);
+        background-repeat: no-repeat;
+        height:100vh ;
+    }
+    .container{
+      
+        max-width: 100%;
+        position: relative;
+        top:5rem;
+    
+        
+    }
+    input{
+        width: 100%;
+        height:2.5rem;
+        text-align: end;
+        background-color: black;
+        color: white;
+        border: none;
+        font-size: 1.5rem;
+       
+    }
+    #compValue{
+        margin-bottom: -5px;
+      color: rgb(209, 192, 192);
+      height: 4rem;
+      border-radius: 5px 0 ;
+    }
+    table{
+        
+        width: 101%;
+        background-color: rgb(75, 71, 71);
+        padding: 10px;
+        border-spacing: 0.3rem;
+    
+    }
+    td{
+        background-color: white;
+        padding: 1.2rem;
+        margin: 2rem;;
+        cursor:pointer;
+        text-align: center;
+        border-radius: 4px;
+        transition: 0.7s;
+      
+    }
+    td.operators{
+        background-color: black;
+        color: white;
+    }
+    td:hover {
+        background-color: black;
+        color: white;
+    }
+    td.operators:hover{
+        background-color: white;
+        color: black;
+    }
+    .equal{
+        background-color: rgb(197, 197, 32);
+        color: white;
+    }
+</style>
+<body>
+    <div class="container">
+        <!-- <div><input type="text" id="inputValue" placeholder="0"></div> -->
+        <div><input type="text" id="compValue" placeholder="0" disabled></div>
+        <table>
+            <tr>
+                <td onclick="memoryOperation('c')">mc</td>
+                <td onclick="memoryOperation('+')">m+</td>
+                <td onclick="memoryOperation('-')">m-</td>
+                <td onclick="memoryOperation('r')">mr</td>
+            </tr>
+            <tr>
+                <td onclick="addInput('(')">(</td>
+                <td onclick="addInput(')')">)</td>
+                <td onclick="clearEntry()">CE</td>
+                <td class="operators" onclick="addInput('+')"><b>+</b></td>
+            </tr>
+            <tr>
+                <td onclick="addInput('7')">7</td>
+                <td onclick="addInput('8')">8</td>
+                <td onclick="addInput('9')">9</td>
+                <td class="operators" onclick="addInput('-')"><b>-</b></td>
+            </tr>
+            <tr>
+                <td onclick="addInput('4')">4</td>
+                <td onclick="addInput('5')">5</td>
+                <td onclick="addInput('6')">6</td>
+                <td class="operators" onclick="addInput('*')"><b>x</b></td>
+            </tr>
+            <tr>
+                <td onclick="addInput('1')">1</td>
+                <td onclick="addInput('2')">2</td>
+                <td onclick="addInput('3')">3</td>
+                <td class="operators" onclick="addInput('/')"><b>/</b></td>
+            </tr>
+            <tr>
+                <td onclick="clearAll()">C</td>
+                <td onclick="addInput('0')">0</td>
+                <td onclick="addInput('.')">.</td>
+                <td class="equal"  onclick="compute()"><b>=</b></td>
+            </tr>
+        </table>
+    </div>
+
+
+    <script>
+        let inputValue='';
+        let inputDisplay=document.getElementById("inputValue")
+        let compDisplay=document.getElementById("compValue")
+        let memory=0;
+        window.localStorage.setItem("memory",0)
+
+
+        function addInput(a) {
+            inputValue += a;
+            compDisplay.value=inputValue
+        }
+
+        function compute() {
+           if(inputValue)
+           {
+            try{
+                answer=eval(inputValue)
+                compDisplay.value=answer
+                inputValue='';
+                // inputDisplay.value=inputValue
+
+            }
+            catch{
+                alert("invalid input")
+                inputValue=''
+                compDisplay.value=0;
+            }
+        }
+        }
+
+        function clearAll() {
+                inputValue='';
+                compDisplay.value=inputValue
+        }
+        function clearEntry() {
+            if(inputValue)
+            {   
+                inputValue=inputValue.slice(0,inputValue.length-1)
+                compDisplay.value=inputValue;
+ 
+            }
+        }
+        function memoryOperation(operator) {
+            let temp;
+            if(operator === '+')
+            {
+                temp=window.localStorage.getItem("memory")
+                console.log(temp)
+                temp=+temp + +compDisplay.value;
+                console.log( typeof temp,typeof compDisplay.value)
+                window.localStorage.setItem("memory",temp)
+
+            }
+            if(operator === '-')
+            {
+                temp=window.localStorage.getItem("memory")
+                temp=+temp - +compDisplay.value;
+                window.localStorage.setItem("memory",temp)
+            }
+            if(operator === 'c')
+            {
+                window.localStorage.setItem("memory",0)
+            }
+            if(operator === 'r')
+            {
+                temp=window.localStorage.getItem("memory");
+                compDisplay.value=temp;
+            }
+        }
+
+    </script>
+</body>
+</html>
